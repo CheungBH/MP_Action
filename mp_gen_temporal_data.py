@@ -1,5 +1,4 @@
-import sys
-
+import argparse
 import cv2
 import mediapipe as mp
 import json
@@ -8,9 +7,14 @@ mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_pose = mp.solutions.pose
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--video_path", type=str, help="Path to the video file",
+                    default="/Users/cheungbh/Documents/lab_dataset/class/raw_video/fight/booker_l.mp4")
+parser.add_argument("--json_path", type=str, help="Path to the output JSON file", default="test.json")
+args = parser.parse_args()
 
-video_path = "/Users/cheungbh/Documents/lab_dataset/class/raw_video/normal/cody.mp4"
-json_path = "cody.json"
+video_path = args.video_path
+json_path = args.json_path
 cap = cv2.VideoCapture(video_path)
 frame_cnt = 0
 json_data = {}
@@ -48,6 +52,9 @@ with mp_pose.Pose(
     # Flip the image horizontally for a selfie-view display.
     cv2.imshow('MediaPipe Pose', image)
     kps = []
+    if not results.pose_landmarks:
+      print(f"Cannot find pose landmarks in image {frame_cnt}")
+      continue
     for i in range(len(results.pose_landmarks.landmark)):
         kps.append(results.pose_landmarks.landmark[i].x)
         kps.append(results.pose_landmarks.landmark[i].y)

@@ -85,7 +85,7 @@ if __name__ == '__main__':
                     f.write(label + "\n")
         return label_ls
 
-    image_src = "/Users/cheungbh/Documents/lab_dataset/mediapipe_auto"
+    image_src = "/Users/cheungbh/Downloads/cut_frame"
     output_src = "tmp"
     csv_path = "results.csv"
     assert csv_path and image_src, "Please specify image_src and csv_path"
