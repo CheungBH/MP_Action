@@ -8,9 +8,9 @@ mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_pose = mp.solutions.pose
 
-video_path = "/Users/cheungbh/Documents/lab_dataset/class/raw_video/normal/cody.mp4"
-ML_path = "/Users/cheungbh/Documents/lab_code/yolov7_pose/weights/knn_model.joblib"
-ML_label = "/Users/cheungbh/Documents/lab_code/yolov7_pose/labels/sample"
+video_path = "/Users/cheungbh/Documents/lab_dataset/class/raw_video/fight/cody_l.mp4"
+ML_path = "/Users/cheungbh/Documents/lab_code/KpsActionClassification/exp/knn_model.joblib"
+ML_label = "label.txt"
 with open(ML_label, 'r') as file:
     ML_classes = file.readlines()
 joblib_model = joblib.load(ML_path)
@@ -46,7 +46,7 @@ with mp_pose.Pose(
         kps_record.append(results.pose_landmarks.landmark[idx].x)
         kps_record.append(results.pose_landmarks.landmark[idx].y)
 
-    predict_nums = joblib_model.predict(np.array(kps_record))
+    predict_nums = joblib_model.predict(np.array([kps_record]))
     # predict_action = ML_classes[int(predict_num)][:-1]
     actions = [ML_classes[int(n)][:-1] for n in predict_nums]
     print(actions)
