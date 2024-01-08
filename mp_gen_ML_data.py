@@ -4,7 +4,8 @@ import numpy as np
 import os
 import csv
 
-target_idx = [0, 2, 5, 7, 8, 11, 12, 13, 14, 15, 16, 23, 24, 25, 26, 27, 28]
+from config import kpts_idx
+target_idx = kpts_idx
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles

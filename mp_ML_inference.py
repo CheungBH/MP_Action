@@ -16,8 +16,8 @@ with open(ML_label, 'r') as file:
 joblib_model = joblib.load(ML_path)
 
 
-target_idx = [0, 2, 5, 7, 8, 11, 12, 13, 14, 15, 16, 23, 24, 25, 26, 27, 28]
-
+from config import kpts_idx
+target_idx = kpts_idx
 
 # For webcam input:
 
