@@ -95,11 +95,13 @@ if __name__ == '__main__':
     label_path = ""
     classes = get_classes(label_path, image_src)
     for idx, cls in enumerate(classes):
-        if idx % 50 == 0:
-            print(f"Processing {idx}th class: {cls}")
+        # if idx % 50 == 0:
+        print(f"Processing {idx}th class: {cls}")
         info = [str(idx), cls]
         image_folder = os.path.join(image_src, cls)
         output_folder = os.path.join(output_src, cls) if output_src else ""
+        if output_folder and not os.path.exists(output_folder):
+            os.makedirs(output_folder)
         process_action(image_folder, output_src, csv_path, info)
 
 
