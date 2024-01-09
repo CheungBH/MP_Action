@@ -8,8 +8,8 @@ mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_pose = mp.solutions.pose
 
-video_path = "/Users/cheungbh/Documents/lab_dataset/class/raw_video/fight/cody_l.mp4"
-ML_path = "/Users/cheungbh/Documents/lab_code/KpsActionClassification/exp/knn_model.joblib"
+video_path = "/Users/cheungbh/Downloads/IMG_5849.MOV"
+ML_path = "/Users/cheungbh/Documents/lab_code/KpsActionClassification/exp/DeTree_model.joblib"
 ML_label = "label.txt"
 with open(ML_label, 'r') as file:
     ML_classes = file.readlines()
@@ -42,6 +42,8 @@ with mp_pose.Pose(
     image.flags.writeable = True
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
     kps_record = []
+    if not results.pose_landmarks:
+        continue
     for idx in target_idx:
         kps_record.append(results.pose_landmarks.landmark[idx].x)
         kps_record.append(results.pose_landmarks.landmark[idx].y)

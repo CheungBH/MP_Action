@@ -20,6 +20,8 @@ def process_action(image_folder, output_folder, csv_path, info):
         enable_segmentation=True,
         min_detection_confidence=0.5) as pose:
       for idx, file in enumerate(IMAGE_FILES):
+        if idx % 50 == 0:
+            print(f"Processing {idx}th image: {file}")
         kps_record = []
         file_name = os.path.join(image_folder, file)
         result_file_name = os.path.join(output_folder, file)
@@ -86,13 +88,15 @@ if __name__ == '__main__':
                     f.write(label + "\n")
         return label_ls
 
-    image_src = "/Users/cheungbh/Downloads/cut_frame"
-    output_src = "tmp"
-    csv_path = "results.csv"
+    image_src = "images/squat"
+    output_src = "tmp/squat"
+    csv_path = "squat.csv"
     assert csv_path and image_src, "Please specify image_src and csv_path"
     label_path = ""
     classes = get_classes(label_path, image_src)
     for idx, cls in enumerate(classes):
+        if idx % 50 == 0:
+            print(f"Processing {idx}th class: {cls}")
         info = [str(idx), cls]
         image_folder = os.path.join(image_src, cls)
         output_folder = os.path.join(output_src, cls) if output_src else ""
