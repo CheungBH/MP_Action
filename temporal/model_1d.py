@@ -107,7 +107,7 @@ class TemporalSequenceModel(nn.Module):
             x = x.permute(0, 2, 1)
             return self.model(x)
         # if self.Bi:
-        else:
+        elif x is not None:
             if isinstance(self.lstm_net, nn.GRU) and self.Bi:
                 output, final_hidden_state = self.lstm_net(x)
             else:

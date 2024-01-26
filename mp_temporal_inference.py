@@ -10,7 +10,7 @@ mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_pose = mp.solutions.pose
 
-video_path = "/Users/cheungbh/Documents/lab_dataset/class/raw_video/normal/cody.mp4"
+video_path = "/media/hkuit164/Backup/xjl/20231207_kpsVideo/det_video/daniel.mp4"
 
 temporal_label = "/media/hkuit164/Backup/xjl/20231207_kpsVideo/temp_data/train_input/cls.txt"
 with open(temporal_label, 'r') as file:
@@ -18,9 +18,9 @@ with open(temporal_label, 'r') as file:
 
 n_classes = len(temporal_classes)
 
-temporal_module = "BiGRU"
-model_path = '/media/hkuit164/Backup/TemporalClassifier/exp/20231213_kps1/BiGRU_lr0.001/model.pth'
-kps_num = 34
+temporal_module = "BiLSTM"
+model_path = '/media/hkuit164/Backup/TemporalClassifier/exp/mp_test/BiLSTM_lr0.001/model.pth'
+kps_num = 66
 hidden_dims, num_rnn_layers, attention = [64, 2, False]
 temporal_model = TemporalSequenceModel(num_classes=n_classes, input_dim=kps_num, hidden_dims=hidden_dims,
                                        num_rnn_layers=num_rnn_layers, attention=attention,
@@ -44,7 +44,8 @@ with mp_pose.Pose(
     if not success:
       print("Ignoring empty camera frame.")
       # If loading a video, use 'break' instead of 'continue'.
-      continue
+      # continue
+      break
 
     # To improve performance, optionally mark the image as not writeable to
     # pass by reference.
@@ -56,18 +57,21 @@ with mp_pose.Pose(
     image.flags.writeable = True
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
     kps_record = []
-    for idx in target_idx:
+    for idx in range(33):
         kps_record.append(results.pose_landmarks.landmark[idx].x)
         kps_record.append(results.pose_landmarks.landmark[idx].y)
 
     kps_queue.update(kps_record)
     kps = kps_queue.get_data()
-    kps = torch.tensor(kps).unsqueeze(0).to(device)
+    # kps = torch.tensor(kps).unsqueeze(0).to(device)
+    if kps is not None:
+        kps = torch.tensor(kps).unsqueeze(0).to(device)
     outputs = temporal_model(kps)
     # print(Softmax(outputs))
-    temporal_pred = outputs.data.max(1)[1]
-    actions = [temporal_classes[i][:-1] for i in temporal_pred]
-    print(actions)
+    if outputs is not None:
+        temporal_pred = outputs.data.max(1)[1]
+        actions = [temporal_classes[i][:-1] for i in temporal_pred]
+        print(actions)
 
     mp_drawing.draw_landmarks(
         image,
